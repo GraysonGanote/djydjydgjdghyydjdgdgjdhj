@@ -55,10 +55,10 @@ Clear-Host
 Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class GDIRefresh {
     [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
 }'
-[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
-[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
-[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
-[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
 
 Write-Output "Finished"
 Start-Sleep 1
