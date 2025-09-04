@@ -44,13 +44,13 @@ while ($loopState -eq 0) {
         [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY) | Out-Null
         Start-Sleep -Milliseconds $tunnelDelay
     }
-    $loopState = 1
+    $loopState = 1 | Out-Null
 }
 Clear-Host
 Clear-Host
 
-[GDI2]::ReleaseDC([IntPtr]::Zero, $dc)
-[GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
+[GDI2]::ReleaseDC([IntPtr]::Zero, $dc) | Out-Null
+[GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3) | Out-Null
 
 Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class GDIRefresh {
     [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
@@ -64,4 +64,4 @@ Write-Output "Finished"
 Start-Sleep 1
 Clear-Host
 Clear-Host
-Stop-Process -Id $PID
+Stop-Process -Id $PID | Out-Null
