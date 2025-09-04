@@ -23,15 +23,9 @@ $SRCCOPY = 0x00CC0020
 $screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
 $screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
 
-$smallCursor = 1
-$bigCursor = 3 
-
 $tunnelDuration = 15
 $tunnelScaleStep = 0.95
 $tunnelDelay = 30 
-
-$cursorDelay = 300 
-$cursorStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 $loopState = 0
 
@@ -40,27 +34,14 @@ $dc = [GDI2]::GetDC([IntPtr]::Zero)
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 while ($loopState -eq 0) {
-    Clear-Host
     
     while ($stopwatch.Elapsed.TotalSeconds -lt $tunnelDuration) {
-
         $w = [math]::Round($screenWidth * $tunnelScaleStep)
         $h = [math]::Round($screenHeight * $tunnelScaleStep)
         $x = [math]::Round(($screenWidth - $w) / 2)
         $y = [math]::Round(($screenHeight - $h) / 2)
 
         [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY)
-
-        if ($cursorStopwatch.ElapsedMilliseconds -ge $cursorDelay) {
-            $cursorStopwatch.Restart()
-        
-            if ((Get-Random -Minimum 0 -Maximum 2) -eq 0) {
-                [GDI2]::SystemParametersInfo(8233, $bigCursor, [IntPtr]::Zero, 3)
-            } else {
-                [GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
-            }
-        }
-
         Start-Sleep -Milliseconds $tunnelDelay
     }
     $loopState = 1
@@ -82,3 +63,5 @@ Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; pu
 Write-Output "Finished"
 Start-Sleep 1
 Clear-Host
+Clear-Host
+exit
