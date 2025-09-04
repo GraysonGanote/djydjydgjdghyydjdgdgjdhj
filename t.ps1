@@ -44,7 +44,7 @@ while ($loopState -eq 0) {
         [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY) | Out-Null
         Start-Sleep -Milliseconds $tunnelDelay
     }
-    $loopState = 1 | Out-Null
+    $loopState = 1
 }
 Clear-Host
 Clear-Host
