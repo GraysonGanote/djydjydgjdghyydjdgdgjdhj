@@ -41,9 +41,7 @@ $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 while ($loopState -eq 0) {
     Clear-Host
-    Write-Output "Running Tunnel GDI"
-    Start-Sleep -Milliseconds 200
-
+    
     while ($stopwatch.Elapsed.TotalSeconds -lt $tunnelDuration) {
 
         $w = [math]::Round($screenWidth * $tunnelScaleStep)
@@ -68,6 +66,7 @@ while ($loopState -eq 0) {
     $loopState = 1
 }
 Clear-Host
+Clear-Host
 
 [GDI2]::ReleaseDC([IntPtr]::Zero, $dc)
 [GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
@@ -76,7 +75,10 @@ Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; pu
     [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
 }'
 [GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
 
-Write-Output "Tunnel GDI has Finished"
-Start-Sleep 2.5
+Write-Output "Finished"
+Start-Sleep 1
 Clear-Host
