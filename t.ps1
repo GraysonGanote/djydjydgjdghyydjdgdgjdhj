@@ -33,30 +33,50 @@ $tunnelDelay = 30
 $cursorDelay = 300 
 $cursorStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
+$loopState = 0
+
 $dc = [GDI2]::GetDC([IntPtr]::Zero)
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-while ($stopwatch.Elapsed.TotalSeconds -lt $tunnelDuration) {
 
-    $w = [math]::Round($screenWidth * $tunnelScaleStep)
-    $h = [math]::Round($screenHeight * $tunnelScaleStep)
-    $x = [math]::Round(($screenWidth - $w) / 2)
-    $y = [math]::Round(($screenHeight - $h) / 2)
+while ($loopState -eq 0) {
+    Clear-Host
+    Write-Output "Running Tunnel GDI"
+    Start-Sleep -Milliseconds 200
 
-    [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY)
+    while ($stopwatch.Elapsed.TotalSeconds -lt $tunnelDuration) {
 
-    if ($cursorStopwatch.ElapsedMilliseconds -ge $cursorDelay) {
-        $cursorStopwatch.Restart()
+        $w = [math]::Round($screenWidth * $tunnelScaleStep)
+        $h = [math]::Round($screenHeight * $tunnelScaleStep)
+        $x = [math]::Round(($screenWidth - $w) / 2)
+        $y = [math]::Round(($screenHeight - $h) / 2)
+
+        [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY)
+
+        if ($cursorStopwatch.ElapsedMilliseconds -ge $cursorDelay) {
+            $cursorStopwatch.Restart()
         
-        if ((Get-Random -Minimum 0 -Maximum 2) -eq 0) {
-            [GDI2]::SystemParametersInfo(8233, $bigCursor, [IntPtr]::Zero, 3)
-        } else {
-            [GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
+            if ((Get-Random -Minimum 0 -Maximum 2) -eq 0) {
+                [GDI2]::SystemParametersInfo(8233, $bigCursor, [IntPtr]::Zero, 3)
+            } else {
+                [GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
+            }
         }
-    }
 
-    Start-Sleep -Milliseconds $tunnelDelay
+        Start-Sleep -Milliseconds $tunnelDelay
+    }
+    $loopState = 1
 }
+Clear-Host
 
 [GDI2]::ReleaseDC([IntPtr]::Zero, $dc)
 [GDI2]::SystemParametersInfo(8233, $smallCursor, [IntPtr]::Zero, 3)
+
+Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class GDIRefresh {
+    [DllImport("user32.dll")] public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+}'
+[GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true)
+
+Write-Output "Tunnel GDI has Finished"
+Start-Sleep 2.5
+Clear-Host
