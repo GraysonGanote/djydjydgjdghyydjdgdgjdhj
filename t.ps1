@@ -41,7 +41,7 @@ while ($loopState -eq 0) {
         $x = [math]::Round(($screenWidth - $w) / 2)
         $y = [math]::Round(($screenHeight - $h) / 2)
 
-        [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY)
+        [GDI2]::StretchBlt($dc, $x, $y, $w, $h, $dc, 0, 0, $screenWidth, $screenHeight, $SRCCOPY) | Out-Null
         Start-Sleep -Milliseconds $tunnelDelay
     }
     $loopState = 1
@@ -64,4 +64,4 @@ Write-Output "Finished"
 Start-Sleep 1
 Clear-Host
 Clear-Host
-exit
+Stop-Process -Id $PID
