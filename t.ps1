@@ -60,8 +60,9 @@ Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; pu
 [GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
 [GDIRefresh]::InvalidateRect([IntPtr]::Zero, [IntPtr]::Zero, $true) | Out-Null
 
+Clear-Host
 Write-Output "Finished"
-Start-Sleep 1
+Start-Sleep 0.5
 Clear-Host
 Clear-Host
 Stop-Process -Id $PID | Out-Null
